@@ -90,4 +90,9 @@ public class UserEntity implements UserDetails {
     public TeamEntity getTeam() {
         return team;
     }
+
+    public UserEntity(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 }
