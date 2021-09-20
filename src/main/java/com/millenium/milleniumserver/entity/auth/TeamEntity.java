@@ -53,4 +53,11 @@ public class TeamEntity {
     public List<UserEntity> getUsers() {
         return users;
     }
+
+    public TeamEntity(String name, List<Expense> expenses, List<TeamLimit> limits, List<UserEntity> users) {
+        this.name = name;
+        this.expenses = expenses;
+        this.limits = limits;
+        this.users = users;
+    }
 }
