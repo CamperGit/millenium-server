@@ -18,8 +18,7 @@ public class TeamController {
     private TeamEntityService teamEntityService;
 
     @PostMapping
-    public TeamEntity createNewTeam(@RequestParam String name, @RequestParam Integer number) {
-        System.out.println(number);
+    public TeamEntity createNewTeam(@RequestParam String name) {
         return teamEntityService.saveTeam(new TeamEntity(name, new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
     }
 
