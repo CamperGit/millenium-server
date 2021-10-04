@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/auth")
 public class AuthController {
 
-
+    /**aboba*/
     private AuthenticationManager authenticationManager;
     private UserEntityService userEntityService;
     private UserRoleEntityService userRoleEntityService;
