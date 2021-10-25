@@ -49,7 +49,10 @@ public class TeamEntity {
         return limits;
     }
 
-    @OneToMany(mappedBy = "team")
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "teams_users",
+            joinColumns = @JoinColumn(name = "team_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     public List<UserEntity> getUsers() {
         return users;
     }

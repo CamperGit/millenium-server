@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -20,88 +21,92 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode
 @Table(name = "users", schema = "millenium")
 public class UserEntity implements UserDetails {
+
+    private Integer userId;
+    private String username;
+    @JsonIgnore
+    private String password;
+    private String email;
+    private Set<UserRoleEntity> roles;
+    @JsonIgnoreProperties("users")
+    private List<TeamEntity> teams;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", nullable = false)
-    private Integer userId;
-
-    @Basic
-    @Column(name = "username", nullable = false, length = 16)
-    private String username;
-
-    @Basic
-    @JsonIgnore
-    @Column(name = "password", nullable = false, length = 500)
-    private String password;
-
-    @Basic
-    @Column(name = "email")
-    private String email;
-
-    @ManyToMany(fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL)
-    private Set<UserRoleEntity> roles;
-
-    @JsonIgnoreProperties("users")
-    @ManyToOne
-    @JoinColumn(name = "team_id", referencedColumnName = "team_id", nullable = false)
-    private TeamEntity team;
-
     public Integer getUserId() {
         return userId;
     }
 
+    @Basic
+    @Column(name = "username", nullable = false, length = 16)
     public String getUsername() {
         return username;
     }
 
+    @Basic
+    @Column(name = "password", nullable = false, length = 500)
     @Override
     public String getPassword() {
         return password;
     }
 
+    @Basic
+    @Column(name = "email")
     public String getEmail() {
         return email;
     }
 
     @Override
+    @Transient
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @Transient
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @Transient
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @Transient
     public boolean isEnabled() {
         return true;
     }
 
     @Override
+    @Transient
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getRole()))
                 .collect(Collectors.toList());
     }
 
+    @ManyToMany(fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL)
     public Set<UserRoleEntity> getRoles() {
         return roles;
     }
 
-    public TeamEntity getTeam() {
-        return team;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "teams_users",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "team_id"))
+    public List<TeamEntity> getTeams() {
+        return teams;
     }
 
-    public UserEntity(String username, String password, String email) {
+    public UserEntity(String username, String password, String email, List<TeamEntity> teams) {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.teams = teams;
     }
 }

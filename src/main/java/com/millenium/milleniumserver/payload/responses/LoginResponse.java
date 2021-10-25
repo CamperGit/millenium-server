@@ -12,17 +12,17 @@ public class LoginResponse {
     private String refreshToken;
     private Integer id;
     private String username;
-    private Integer teamId;
+    private List<Integer> teamsIds;
     private String email;
     private final List<String> roles;
     private final String tokenType = "Bearer";
 
-    public LoginResponse(String accessToken, String refreshToken, Integer id, String username, Integer teamId, String email, List<String> roles) {
+    public LoginResponse(String accessToken, String refreshToken, Integer id, String username,  String email, List<String> roles, List<Integer> teamsIds) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.id = id;
         this.username = username;
-        this.teamId = teamId;
+        this.teamsIds = teamsIds;
         this.email = email;
         this.roles = roles;
     }

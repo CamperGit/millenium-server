@@ -26,6 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -64,7 +65,7 @@ public class AuthController {
                 newRefreshToken.getToken(),
                 userEntity.getUserId(),
                 userEntity.getUsername(),
-                null, userEntity.getEmail(), roles));
+                userEntity.getEmail(), roles, new ArrayList<>()));
     }
 
     @PostMapping("/signup")
@@ -75,7 +76,7 @@ public class AuthController {
                     .body(new MessageResponse("Данное имя пользователя уже занято!"));
         }
 
-        UserEntity user = new UserEntity(signUpRequest.getUsername(), encoder.encode(signUpRequest.getPassword()), signUpRequest.getEmail());
+        UserEntity user = new UserEntity(signUpRequest.getUsername(), encoder.encode(signUpRequest.getPassword()), signUpRequest.getEmail(), new ArrayList<>());
 
         Set<String> strRoles = signUpRequest.getRoles();
         Set<UserRoleEntity> roles = new HashSet<>();

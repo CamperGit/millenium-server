@@ -14,28 +14,32 @@ import java.util.Set;
 @Setter
 @EqualsAndHashCode
 public class UserRoleEntity implements GrantedAuthority {
+
+    private Integer roleId;
+    private String role;
+    private Set<UserEntity> users;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id", nullable = false)
-    private Integer roleId;
-
-    @Basic
-    @Column(name = "name", nullable = false, length = 50)
-    private String role;
-
-    @Transient
-    @ManyToMany(mappedBy = "roles",
-            cascade = CascadeType.ALL)
-    private Set<UserEntity> users;
-
     public Integer getRoleId() {
         return roleId;
     }
 
+    @Basic
+    @Column(name = "name", nullable = false, length = 50)
     public String getRole() {
         return role;
     }
 
+    @Transient
+    @ManyToMany(mappedBy = "roles",
+            cascade = CascadeType.ALL)
+    public Set<UserEntity> getUsers() {
+        return users;
+    }
+
+    @Transient
     @Override
     public String getAuthority() {
         return getRole();
