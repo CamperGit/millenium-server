@@ -8,7 +8,7 @@ import com.millenium.milleniumserver.jwt.JwtUtils;
 import com.millenium.milleniumserver.payload.requests.LoginRequest;
 import com.millenium.milleniumserver.payload.requests.SignupRequest;
 import com.millenium.milleniumserver.payload.requests.TokenRefreshRequest;
-import com.millenium.milleniumserver.payload.responses.JwtResponse;
+import com.millenium.milleniumserver.payload.responses.LoginResponse;
 import com.millenium.milleniumserver.payload.responses.MessageResponse;
 import com.millenium.milleniumserver.payload.responses.TokenRefreshResponse;
 import com.millenium.milleniumserver.services.auth.RefreshTokenService;
@@ -26,8 +26,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -62,11 +60,11 @@ public class AuthController {
         refreshTokenService.disableRefreshToken(userEntity);
         RefreshTokenEntity newRefreshToken = refreshTokenService.createRefreshToken(userEntity);
 
-        return ResponseEntity.ok(new JwtResponse(accessToken,
+        return ResponseEntity.ok(new LoginResponse(accessToken,
                 newRefreshToken.getToken(),
                 userEntity.getUserId(),
                 userEntity.getUsername(),
-                roles));
+                null, userEntity.getEmail(), roles));
     }
 
     @PostMapping("/signup")
@@ -77,7 +75,7 @@ public class AuthController {
                     .body(new MessageResponse("Данное имя пользователя уже занято!"));
         }
 
-        UserEntity user = new UserEntity(signUpRequest.getUsername(), encoder.encode(signUpRequest.getPassword()));
+        UserEntity user = new UserEntity(signUpRequest.getUsername(), encoder.encode(signUpRequest.getPassword()), signUpRequest.getEmail());
 
         Set<String> strRoles = signUpRequest.getRoles();
         Set<UserRoleEntity> roles = new HashSet<>();
@@ -113,7 +111,7 @@ public class AuthController {
     public ResponseEntity<?> refreshToken(@Valid @RequestBody TokenRefreshRequest request) {
         String requestRefreshToken = request.getRefreshToken();
 
-        RefreshTokenEntity refreshTokenEntity = refreshTokenService.findByToken(requestRefreshToken).orElseThrow(()->
+        RefreshTokenEntity refreshTokenEntity = refreshTokenService.findByToken(requestRefreshToken).orElseThrow(() ->
                 new TokenException(requestRefreshToken,
                         "Refresh token is not in database!"));
         refreshTokenEntity = refreshTokenService.checkUsage(refreshTokenEntity);

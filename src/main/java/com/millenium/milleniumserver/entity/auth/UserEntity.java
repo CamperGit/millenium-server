@@ -34,6 +34,10 @@ public class UserEntity implements UserDetails {
     @Column(name = "password", nullable = false, length = 500)
     private String password;
 
+    @Basic
+    @Column(name = "email")
+    private String email;
+
     @ManyToMany(fetch = FetchType.EAGER,
             cascade = CascadeType.ALL)
     private Set<UserRoleEntity> roles;
@@ -54,6 +58,10 @@ public class UserEntity implements UserDetails {
     @Override
     public String getPassword() {
         return password;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     @Override
@@ -91,8 +99,9 @@ public class UserEntity implements UserDetails {
         return team;
     }
 
-    public UserEntity(String username, String password) {
+    public UserEntity(String username, String password, String email) {
         this.username = username;
         this.password = password;
+        this.email = email;
     }
 }

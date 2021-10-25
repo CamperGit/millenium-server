@@ -7,19 +7,23 @@ import java.util.List;
 
 @Getter
 @Setter
-public class JwtResponse {
+public class LoginResponse {
     private String accessToken;
-    private String type = "Bearer";
     private String refreshToken;
     private Integer id;
     private String username;
+    private Integer teamId;
+    private String email;
     private final List<String> roles;
+    private final String tokenType = "Bearer";
 
-    public JwtResponse(String accessToken, String refreshToken, Integer id, String username, List<String> roles) {
+    public LoginResponse(String accessToken, String refreshToken, Integer id, String username, Integer teamId, String email, List<String> roles) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.id = id;
         this.username = username;
+        this.teamId = teamId;
+        this.email = email;
         this.roles = roles;
     }
 }
