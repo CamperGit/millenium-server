@@ -37,8 +37,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-
-    /**aboba*/
     private AuthenticationManager authenticationManager;
     private UserEntityService userEntityService;
     private UserRoleEntityService userRoleEntityService;
@@ -76,11 +74,10 @@ public class AuthController {
         if (userEntityService.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Username is already taken!"));
+                    .body(new MessageResponse("Данное имя пользователя уже занято!"));
         }
 
-        UserEntity user = new UserEntity(signUpRequest.getUsername(),
-                encoder.encode(signUpRequest.getPassword()));
+        UserEntity user = new UserEntity(signUpRequest.getUsername(), encoder.encode(signUpRequest.getPassword()));
 
         Set<String> strRoles = signUpRequest.getRoles();
         Set<UserRoleEntity> roles = new HashSet<>();
@@ -109,7 +106,7 @@ public class AuthController {
         user.setRoles(roles);
         userEntityService.saveUser(user);
 
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        return ResponseEntity.ok(new MessageResponse("Успешная регистрация!"));
     }
 
     @PostMapping("/refreshtoken")
