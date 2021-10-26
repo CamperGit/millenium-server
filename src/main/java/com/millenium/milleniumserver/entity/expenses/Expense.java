@@ -28,7 +28,7 @@ public class Expense {
     private Double fixedPrice;
     private Double minPrice;
     private Double maxPrice;
-    @JsonBackReference("categories")
+    @JsonBackReference
     private Category category;
 
     @Id
@@ -88,9 +88,21 @@ public class Expense {
         return maxPrice;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", referencedColumnName = "category_id")
     public Category getCategory() {
         return category;
+    }
+
+    public Expense(String name, Timestamp date, ExpensePriority priority, ExpenseState state, String description, Double fixedPrice, Double minPrice, Double maxPrice, Category category) {
+        this.name = name;
+        this.date = date;
+        this.priority = priority;
+        this.state = state;
+        this.description = description;
+        this.fixedPrice = fixedPrice;
+        this.minPrice = minPrice;
+        this.maxPrice = maxPrice;
+        this.category = category;
     }
 }

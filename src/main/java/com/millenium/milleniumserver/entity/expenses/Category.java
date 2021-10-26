@@ -18,7 +18,7 @@ import java.util.List;
 public class Category {
     private Integer categoryId;
     private String name;
-    @JsonIgnoreProperties("category")
+    @JsonManagedReference
     private List<Expense> expenses;
     @JsonIgnoreProperties("categories")
     private TeamEntity team;

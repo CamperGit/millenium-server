@@ -20,6 +20,10 @@ public class CategoriesService {
         return categoriesRepo.save(category);
     }
 
+    public Category findCategoryById(Integer categoryId) {
+        return categoriesRepo.getById(categoryId);
+    }
+
     @Autowired
     public void setCategoriesRepo(CategoriesRepo categoriesRepo) {
         this.categoriesRepo = categoriesRepo;
