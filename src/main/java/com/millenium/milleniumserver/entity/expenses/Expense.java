@@ -1,5 +1,6 @@
 package com.millenium.milleniumserver.entity.expenses;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.millenium.milleniumserver.entity.auth.TeamEntity;
 import com.millenium.milleniumserver.enums.ExpensePriority;
@@ -27,9 +28,8 @@ public class Expense {
     private Double fixedPrice;
     private Double minPrice;
     private Double maxPrice;
-    @JsonIgnoreProperties("expenses")
+    @JsonBackReference("categories")
     private Category category;
-    @JsonIgnoreProperties("expenses")
     private TeamEntity team;
 
     @Id

@@ -1,11 +1,13 @@
 package com.millenium.milleniumserver.entity.auth;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -17,7 +19,8 @@ public class UserRoleEntity implements GrantedAuthority {
 
     private Integer roleId;
     private String role;
-    private Set<UserEntity> users;
+    @JsonIgnoreProperties("roles")
+    private List<UserEntity> users;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,10 +35,11 @@ public class UserRoleEntity implements GrantedAuthority {
         return role;
     }
 
-    @Transient
-    @ManyToMany(mappedBy = "roles",
-            cascade = CascadeType.ALL)
-    public Set<UserEntity> getUsers() {
+    @ManyToMany
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    public List<UserEntity> getUsers() {
         return users;
     }
 

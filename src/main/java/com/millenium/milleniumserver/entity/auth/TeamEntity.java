@@ -1,5 +1,6 @@
 package com.millenium.milleniumserver.entity.auth;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.millenium.milleniumserver.entity.expenses.Expense;
 import com.millenium.milleniumserver.entity.expenses.TeamLimit;
@@ -19,11 +20,11 @@ import java.util.List;
 public class TeamEntity {
     private Integer teamId;
     private String name;
-    @JsonManagedReference
+    @JsonIgnoreProperties("teams")
     private List<Expense> expenses;
-    @JsonManagedReference
+    @JsonIgnoreProperties("teams")
     private List<TeamLimit> limits;
-    @JsonManagedReference
+    @JsonIgnoreProperties("teams")
     private List<UserEntity> users;
 
     @Id
@@ -49,7 +50,7 @@ public class TeamEntity {
         return limits;
     }
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "teams_users",
             joinColumns = @JoinColumn(name = "team_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))

@@ -1,6 +1,7 @@
 package com.millenium.milleniumserver.controller.auth;
 
 import com.millenium.milleniumserver.entity.auth.RefreshTokenEntity;
+import com.millenium.milleniumserver.entity.auth.TeamEntity;
 import com.millenium.milleniumserver.entity.auth.UserEntity;
 import com.millenium.milleniumserver.entity.auth.UserRoleEntity;
 import com.millenium.milleniumserver.exceptions.TokenException;
@@ -43,6 +44,14 @@ public class AuthController {
     private PasswordEncoder encoder;
     private JwtUtils jwtUtils;
 
+    @GetMapping("/info")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<?> getUserInfo() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserEntity userEntity = (UserEntity) userEntityService.loadUserByUsername(authentication.getName());
+        return ResponseEntity.ok(userEntity);
+    }
+
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
@@ -79,7 +88,7 @@ public class AuthController {
         UserEntity user = new UserEntity(signUpRequest.getUsername(), encoder.encode(signUpRequest.getPassword()), signUpRequest.getEmail(), new ArrayList<>());
 
         Set<String> strRoles = signUpRequest.getRoles();
-        Set<UserRoleEntity> roles = new HashSet<>();
+        List<UserRoleEntity> roles = new ArrayList<>();
 
         if (strRoles == null) {
             UserRoleEntity userRole = userRoleEntityService.findByRole("ROLE_USER");

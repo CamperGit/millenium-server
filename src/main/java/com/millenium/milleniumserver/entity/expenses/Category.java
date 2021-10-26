@@ -1,5 +1,6 @@
 package com.millenium.milleniumserver.entity.expenses;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -16,7 +17,7 @@ import java.util.List;
 public class Category {
     private Integer categoryId;
     private String name;
-    @JsonManagedReference
+    @JsonIgnoreProperties("category")
     private List<Expense> expenses;
 
     @Id

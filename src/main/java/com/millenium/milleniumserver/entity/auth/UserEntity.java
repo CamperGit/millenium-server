@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,7 +29,10 @@ public class UserEntity implements UserDetails {
     @JsonIgnore
     private String password;
     private String email;
-    private Set<UserRoleEntity> roles;
+    @JsonIgnoreProperties("users")
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<UserRoleEntity> roles;
+    @LazyCollection(LazyCollectionOption.FALSE)
     @JsonIgnoreProperties("users")
     private List<TeamEntity> teams;
 
@@ -89,13 +94,15 @@ public class UserEntity implements UserDetails {
                 .collect(Collectors.toList());
     }
 
-    @ManyToMany(fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL)
-    public Set<UserRoleEntity> getRoles() {
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    public List<UserRoleEntity> getRoles() {
         return roles;
     }
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(name = "teams_users",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "team_id"))

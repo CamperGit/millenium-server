@@ -1,5 +1,6 @@
 package com.millenium.milleniumserver.entity.expenses;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.millenium.milleniumserver.entity.auth.TeamEntity;
 import lombok.EqualsAndHashCode;
@@ -19,7 +20,6 @@ public class TeamLimit {
     private Double limit;
     private Integer month;
     private Integer year;
-    @JsonIgnoreProperties("limits")
     private TeamEntity team;
 
     @Id
