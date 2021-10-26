@@ -1,6 +1,8 @@
 package com.millenium.milleniumserver.services.auth;
 
 import com.millenium.milleniumserver.entity.auth.UserEntity;
+import com.millenium.milleniumserver.entity.auth.UserRoleEntity;
+import com.millenium.milleniumserver.payload.responses.UserInfoResponse;
 import com.millenium.milleniumserver.repos.auth.UserEntityRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -20,6 +23,13 @@ public class UserEntityService implements UserDetailsService {
 
     public void saveUser(UserEntity user) {
         userEntityRepo.save(user);
+    }
+
+    public UserInfoResponse getUserInfoResponse(UserEntity userEntity) {
+        UserInfoResponse userInfoResponse = new UserInfoResponse();
+        userInfoResponse.setRoles(userEntity.getRoles().stream().map(UserRoleEntity::getRole).collect(Collectors.toList()));
+        userInfoResponse.setTeams(userEntity.getTeams());
+        return userInfoResponse;
     }
 
     @Transactional(readOnly = true)

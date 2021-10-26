@@ -30,9 +30,9 @@ public class UserEntity implements UserDetails {
     private String password;
     private String email;
     @JsonIgnoreProperties("users")
-    @LazyCollection(LazyCollectionOption.FALSE)
+    //@LazyCollection(LazyCollectionOption.FALSE)
     private List<UserRoleEntity> roles;
-    @LazyCollection(LazyCollectionOption.FALSE)
+    //@LazyCollection(LazyCollectionOption.FALSE)
     @JsonIgnoreProperties("users")
     private List<TeamEntity> teams;
 

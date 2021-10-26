@@ -49,7 +49,7 @@ public class AuthController {
     public ResponseEntity<?> getUserInfo() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserEntity userEntity = (UserEntity) userEntityService.loadUserByUsername(authentication.getName());
-        return ResponseEntity.ok(userEntity);
+        return ResponseEntity.ok(userEntityService.getUserInfoResponse(userEntity));
     }
 
     @PostMapping("/signin")
@@ -137,13 +137,6 @@ public class AuthController {
         } else {
             throw new TokenException(requestRefreshToken, "Invalid refresh token");
         }
-    }
-
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    @GetMapping("/userRoles")
-    public List<String> getUserRolesById(@RequestParam Integer userId) {
-        UserEntity user = userEntityService.findUserById(userId);
-        return user.getRoles().stream().map(UserRoleEntity::getRole).collect(Collectors.toList());
     }
 
     @Autowired
