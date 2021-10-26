@@ -2,6 +2,7 @@ package com.millenium.milleniumserver.controller.auth;
 
 import com.millenium.milleniumserver.entity.auth.TeamEntity;
 import com.millenium.milleniumserver.entity.auth.UserEntity;
+import com.millenium.milleniumserver.entity.expenses.Category;
 import com.millenium.milleniumserver.services.auth.TeamEntityService;
 import com.millenium.milleniumserver.services.auth.UserEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 
 @CrossOrigin(origins = "${crossOrigin.url}", maxAge = 3600)
 @RestController
@@ -21,7 +23,12 @@ public class TeamController {
     @PostMapping
     public TeamEntity createNewTeamWithUser(@RequestParam String name, @RequestParam Integer userId) {
         UserEntity user = userEntityService.findUserById(userId);
-        return teamEntityService.saveTeam(new TeamEntity(name, new ArrayList<>(), new ArrayList<>(), Collections.singletonList(user)));
+        return teamEntityService.createNewTeam(name, user);
+    }
+
+    @GetMapping("/{id}/categories")
+    public List<Category> getCategoriesByTeam(@PathVariable("id") TeamEntity teamEntity) {
+        return teamEntity.getCategories();
     }
 
     @GetMapping

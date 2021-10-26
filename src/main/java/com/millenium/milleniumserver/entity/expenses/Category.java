@@ -2,6 +2,7 @@ package com.millenium.milleniumserver.entity.expenses;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.millenium.milleniumserver.entity.auth.TeamEntity;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,6 +20,8 @@ public class Category {
     private String name;
     @JsonIgnoreProperties("category")
     private List<Expense> expenses;
+    @JsonIgnoreProperties("categories")
+    private TeamEntity team;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,5 +39,17 @@ public class Category {
     @OneToMany(mappedBy = "category")
     public List<Expense> getExpenses() {
         return expenses;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "team_id", referencedColumnName = "team_id", nullable = false)
+    public TeamEntity getTeam() {
+        return team;
+    }
+
+    public Category(String name, List<Expense> expenses, TeamEntity team) {
+        this.name = name;
+        this.expenses = expenses;
+        this.team = team;
     }
 }

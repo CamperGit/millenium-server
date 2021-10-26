@@ -2,6 +2,7 @@ package com.millenium.milleniumserver.entity.auth;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.millenium.milleniumserver.entity.expenses.Category;
 import com.millenium.milleniumserver.entity.expenses.Expense;
 import com.millenium.milleniumserver.entity.expenses.TeamLimit;
 import lombok.EqualsAndHashCode;
@@ -20,8 +21,8 @@ import java.util.List;
 public class TeamEntity {
     private Integer teamId;
     private String name;
-    @JsonIgnoreProperties("teams")
-    private List<Expense> expenses;
+    @JsonIgnoreProperties("team")
+    private List<Category> categories;
     @JsonIgnoreProperties("teams")
     private List<TeamLimit> limits;
     @JsonIgnoreProperties("teams")
@@ -41,8 +42,8 @@ public class TeamEntity {
     }
 
     @OneToMany(mappedBy = "team")
-    public List<Expense> getExpenses() {
-        return expenses;
+    public List<Category> getCategories() {
+        return categories;
     }
 
     @OneToMany(mappedBy = "team")
@@ -58,9 +59,9 @@ public class TeamEntity {
         return users;
     }
 
-    public TeamEntity(String name, List<Expense> expenses, List<TeamLimit> limits, List<UserEntity> users) {
+    public TeamEntity(String name, List<Category> categories, List<TeamLimit> limits, List<UserEntity> users) {
         this.name = name;
-        this.expenses = expenses;
+        this.categories = categories;
         this.limits = limits;
         this.users = users;
     }

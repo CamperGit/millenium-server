@@ -30,7 +30,6 @@ public class Expense {
     private Double maxPrice;
     @JsonBackReference("categories")
     private Category category;
-    private TeamEntity team;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -93,11 +92,5 @@ public class Expense {
     @JoinColumn(name = "category_id", referencedColumnName = "category_id")
     public Category getCategory() {
         return category;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "team_id", referencedColumnName = "team_id", nullable = false)
-    public TeamEntity getTeam() {
-        return team;
     }
 }
