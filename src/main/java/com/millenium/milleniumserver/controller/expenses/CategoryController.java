@@ -6,6 +6,7 @@ import com.millenium.milleniumserver.entity.expenses.Category;
 import com.millenium.milleniumserver.services.auth.TeamEntityService;
 import com.millenium.milleniumserver.services.expenses.CategoriesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class CategoryController {
     private CategoriesService categoriesService;
     private TeamEntityService teamEntityService;
 
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     @PostMapping
     public Category createNewCategory(@RequestParam String name, @RequestParam Integer teamId) {
         TeamEntity teamEntity = teamEntityService.getTeamEntityById(teamId);

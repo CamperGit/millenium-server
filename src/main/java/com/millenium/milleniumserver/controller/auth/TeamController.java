@@ -6,6 +6,7 @@ import com.millenium.milleniumserver.entity.expenses.Category;
 import com.millenium.milleniumserver.services.auth.TeamEntityService;
 import com.millenium.milleniumserver.services.auth.UserEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -20,12 +21,14 @@ public class TeamController {
     private TeamEntityService teamEntityService;
     private UserEntityService userEntityService;
 
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     @PostMapping
     public TeamEntity createNewTeamWithUser(@RequestParam String name, @RequestParam Integer userId) {
         UserEntity user = userEntityService.findUserById(userId);
         return teamEntityService.createNewTeam(name, user);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     @GetMapping("/{id}/categories")
     public List<Category> getCategoriesByTeam(@PathVariable("id") TeamEntity teamEntity) {
         return teamEntity.getCategories();

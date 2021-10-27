@@ -74,7 +74,7 @@ public class AuthController {
                 newRefreshToken.getToken(),
                 userEntity.getUserId(),
                 userEntity.getUsername(),
-                userEntity.getEmail(), roles, new ArrayList<>()));
+                userEntity.getEmail(), roles, userEntity.getTeams()));
     }
 
     @PostMapping("/signup")
