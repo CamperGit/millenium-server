@@ -5,6 +5,7 @@ import com.millenium.milleniumserver.entity.auth.UserEntity;
 import com.millenium.milleniumserver.entity.expenses.Category;
 import com.millenium.milleniumserver.repos.auth.TeamEntityRepo;
 import com.millenium.milleniumserver.services.expenses.CategoriesService;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +22,10 @@ public class TeamEntityService {
 
     @Transactional(readOnly = true)
     public TeamEntity getTeamEntityById(Integer teamId) {
-        return teamEntityRepo.findById(teamId).orElseThrow(EntityNotFoundException::new);
+        TeamEntity teamEntity = teamEntityRepo.findById(teamId).orElseThrow(EntityNotFoundException::new);
+        Hibernate.initialize(teamEntity.getLimits());
+        Hibernate.initialize(teamEntity.getCategories());
+        return teamEntity;
     }
 
     public TeamEntity createNewTeam(String name, UserEntity user) {

@@ -2,6 +2,7 @@ package com.millenium.milleniumserver.entity.auth;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,6 +19,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
+@AllArgsConstructor
 @NoArgsConstructor
 @Setter
 @EqualsAndHashCode

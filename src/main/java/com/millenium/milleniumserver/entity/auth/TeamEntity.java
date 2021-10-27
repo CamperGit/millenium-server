@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.millenium.milleniumserver.entity.expenses.Category;
 import com.millenium.milleniumserver.entity.expenses.Expense;
 import com.millenium.milleniumserver.entity.expenses.TeamLimit;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
+@AllArgsConstructor
 @NoArgsConstructor
 @Setter
 @EqualsAndHashCode

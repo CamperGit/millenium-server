@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.millenium.milleniumserver.entity.auth.TeamEntity;
 import com.millenium.milleniumserver.enums.ExpensePriority;
 import com.millenium.milleniumserver.enums.ExpenseState;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
+@AllArgsConstructor
 @NoArgsConstructor
 @Setter
 @EqualsAndHashCode
@@ -28,7 +30,7 @@ public class Expense {
     private Double fixedPrice;
     private Double minPrice;
     private Double maxPrice;
-    @JsonIgnoreProperties({"expenses", "hibernateLazyInitializer"})
+    @JsonIgnoreProperties({"expenses"})
     private Category category;
 
     @Id
