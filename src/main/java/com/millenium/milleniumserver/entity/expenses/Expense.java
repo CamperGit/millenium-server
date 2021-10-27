@@ -28,7 +28,7 @@ public class Expense {
     private Double fixedPrice;
     private Double minPrice;
     private Double maxPrice;
-    @JsonBackReference
+    @JsonIgnoreProperties({"expenses", "hibernateLazyInitializer"})
     private Category category;
 
     @Id
