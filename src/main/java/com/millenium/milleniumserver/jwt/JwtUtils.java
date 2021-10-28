@@ -1,10 +1,18 @@
 package com.millenium.milleniumserver.jwt;
 
+import com.millenium.milleniumserver.services.auth.UserEntityService;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 
@@ -20,6 +28,8 @@ public class JwtUtils {
 
     @Value("${jwt.refreshTokenExpirationMs}")
     private Long refreshTokenExpirationMs;
+
+    private UserEntityService userEntityService;
 
     public String generateAccessTokenFromUsername(String username) {
         return Jwts.builder().setSubject(username).setIssuedAt(new Date())
@@ -55,5 +65,18 @@ public class JwtUtils {
         }
 
         return false;
+    }
+
+    public String parseJwt(String header) {
+        if (StringUtils.hasText(header) && header.startsWith("Bearer ")) {
+            return header.substring(7);
+        }
+
+        return null;
+    }
+
+    @Autowired
+    public void setUserEntityService(UserEntityService userEntityService) {
+        this.userEntityService = userEntityService;
     }
 }
