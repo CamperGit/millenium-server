@@ -31,10 +31,12 @@ public class JwtUtils {
 
     private UserEntityService userEntityService;
 
-    public String generateAccessTokenFromUsername(String username) {
-        return Jwts.builder().setSubject(username).setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + accessTokenExpirationMs)).signWith(SignatureAlgorithm.HS512, jwtSecret)
+    public AccessToken generateAccessTokenFromUsername(String username) {
+        Date expirationDate = new Date((new Date()).getTime() + accessTokenExpirationMs);
+        String token = Jwts.builder().setSubject(username).setIssuedAt(new Date())
+                .setExpiration(expirationDate).signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
+        return new AccessToken(token, expirationDate);
     }
 
     public String generateRefreshTokenFromUsername(String username) {

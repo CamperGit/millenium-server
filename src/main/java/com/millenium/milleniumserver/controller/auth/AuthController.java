@@ -5,6 +5,7 @@ import com.millenium.milleniumserver.entity.auth.TeamEntity;
 import com.millenium.milleniumserver.entity.auth.UserEntity;
 import com.millenium.milleniumserver.entity.auth.UserRoleEntity;
 import com.millenium.milleniumserver.exceptions.TokenException;
+import com.millenium.milleniumserver.jwt.AccessToken;
 import com.millenium.milleniumserver.jwt.JwtUtils;
 import com.millenium.milleniumserver.payload.requests.LoginRequest;
 import com.millenium.milleniumserver.payload.requests.SignupRequest;
@@ -27,6 +28,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -65,16 +67,16 @@ public class AuthController {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
-        String accessToken = jwtUtils.generateAccessTokenFromUsername(userEntity.getUsername());
+        AccessToken accessToken = jwtUtils.generateAccessTokenFromUsername(userEntity.getUsername());
 
         refreshTokenService.disableRefreshToken(userEntity);
         RefreshTokenEntity newRefreshToken = refreshTokenService.createRefreshToken(userEntity);
-
-        return ResponseEntity.ok(new LoginResponse(accessToken,
+        return ResponseEntity.ok(new LoginResponse(accessToken.getToken(), accessToken.getExpiryTime(),
                 newRefreshToken.getToken(),
+                newRefreshToken.getExpiryTime(),
                 userEntity.getUserId(),
                 userEntity.getUsername(),
-                userEntity.getEmail(), roles, userEntity.getTeams()));
+                userEntity.getTeams(),userEntity.getEmail(), roles));
     }
 
     @PostMapping("/signup")
@@ -132,8 +134,8 @@ public class AuthController {
 
         if (valid) {
             RefreshTokenEntity newRefreshToken = refreshTokenService.createRefreshToken(user);
-            String accessToken = jwtUtils.generateAccessTokenFromUsername(user.getUsername());
-            return ResponseEntity.ok(new TokenRefreshResponse(accessToken, newRefreshToken.getToken()));
+            AccessToken accessToken = jwtUtils.generateAccessTokenFromUsername(user.getUsername());
+            return ResponseEntity.ok(new TokenRefreshResponse(accessToken.getToken(), accessToken.getExpiryTime(), newRefreshToken.getToken(), newRefreshToken.getExpiryTime()));
         } else {
             throw new TokenException(requestRefreshToken, "Invalid refresh token");
         }
