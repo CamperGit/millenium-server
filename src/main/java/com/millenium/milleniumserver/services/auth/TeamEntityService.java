@@ -31,8 +31,9 @@ public class TeamEntityService {
     public TeamEntity createNewTeam(String name, UserEntity user) {
         TeamEntity teamEntity = new TeamEntity(name, new ArrayList<>(), new ArrayList<>(), Collections.singletonList(user));
         TeamEntity savedTeam = teamEntityRepo.save(teamEntity);
-        categoriesService.createNewCategory("EMPTY", savedTeam);
-        return getTeamEntityById(savedTeam.getTeamId());
+        Category emptyCategory = categoriesService.createNewCategory("EMPTY", savedTeam);
+        savedTeam.getCategories().add(emptyCategory);
+        return savedTeam;
     }
 
     @Autowired
