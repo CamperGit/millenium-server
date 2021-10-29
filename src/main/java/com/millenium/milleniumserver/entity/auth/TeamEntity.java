@@ -54,7 +54,7 @@ public class TeamEntity {
     }
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "teams_users",
+    @JoinTable(name = "permissions",
             joinColumns = @JoinColumn(name = "team_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     public List<UserEntity> getUsers() {

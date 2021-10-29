@@ -1,5 +1,7 @@
 package com.millenium.milleniumserver.services.auth;
 
+import com.millenium.milleniumserver.entity.auth.PermissionEntity;
+import com.millenium.milleniumserver.entity.auth.PermissionEntityPK;
 import com.millenium.milleniumserver.entity.auth.TeamEntity;
 import com.millenium.milleniumserver.entity.auth.UserEntity;
 import com.millenium.milleniumserver.entity.expenses.Category;
@@ -13,12 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 
 @Service
 @Transactional
 public class TeamEntityService {
     private TeamEntityRepo teamEntityRepo;
     private CategoriesService categoriesService;
+    private PermissionEntityService permissionEntityService;
 
     @Transactional(readOnly = true)
     public TeamEntity getTeamEntityById(Integer teamId) {
@@ -28,11 +32,15 @@ public class TeamEntityService {
         return teamEntity;
     }
 
-    public TeamEntity createNewTeam(String name, UserEntity user) {
-        TeamEntity teamEntity = new TeamEntity(name, new ArrayList<>(), new ArrayList<>(), Collections.singletonList(user));
-        TeamEntity savedTeam = teamEntityRepo.save(teamEntity);
-        Category emptyCategory = categoriesService.createNewCategory("EMPTY", savedTeam);
-        savedTeam.getCategories().add(emptyCategory);
+    public TeamEntity createNewTeam(String name, Integer userId) {
+        TeamEntity team = new TeamEntity(name, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        TeamEntity savedTeam = teamEntityRepo.save(team);
+
+        Category emptyCategory = categoriesService.createNewCategory("EMPTY", team);
+        team.getCategories().add(emptyCategory);
+
+        permissionEntityService.setOwnerPermissionToUserInTeam(team.getTeamId(), userId);
+
         return savedTeam;
     }
 
@@ -44,5 +52,10 @@ public class TeamEntityService {
     @Autowired
     public void setCategoriesService(CategoriesService categoriesService) {
         this.categoriesService = categoriesService;
+    }
+
+    @Autowired
+    public void setPermissionEntityService(PermissionEntityService permissionEntityService) {
+        this.permissionEntityService = permissionEntityService;
     }
 }

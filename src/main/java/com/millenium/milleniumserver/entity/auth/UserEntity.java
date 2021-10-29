@@ -105,7 +105,7 @@ public class UserEntity implements UserDetails {
     }
 
     @ManyToMany
-    @JoinTable(name = "teams_users",
+    @JoinTable(name = "permissions",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "team_id"))
     public List<TeamEntity> getTeams() {

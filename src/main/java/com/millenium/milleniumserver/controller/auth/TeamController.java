@@ -19,13 +19,11 @@ import java.util.List;
 @RequestMapping("/teams")
 public class TeamController {
     private TeamEntityService teamEntityService;
-    private UserEntityService userEntityService;
 
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @PostMapping
     public TeamEntity createNewTeamWithUser(@RequestParam String name, @RequestParam Integer userId) {
-        UserEntity user = userEntityService.findUserById(userId);
-        return teamEntityService.createNewTeam(name, user);
+        return teamEntityService.createNewTeam(name, userId);
     }
 
     @PreAuthorize("hasAuthority('ROLE_USER')")
@@ -42,10 +40,5 @@ public class TeamController {
     @Autowired
     public void setTeamEntityService(TeamEntityService teamEntityService) {
         this.teamEntityService = teamEntityService;
-    }
-
-    @Autowired
-    public void setUserEntityService(UserEntityService userEntityService) {
-        this.userEntityService = userEntityService;
     }
 }
