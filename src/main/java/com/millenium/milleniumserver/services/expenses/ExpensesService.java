@@ -5,6 +5,7 @@ import com.millenium.milleniumserver.entity.expenses.Expense;
 import com.millenium.milleniumserver.enums.ExpenseState;
 import com.millenium.milleniumserver.payload.requests.expenses.ExpenseCreateRequest;
 import com.millenium.milleniumserver.repos.expenses.ExpensesRepo;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +23,9 @@ public class ExpensesService {
         Category category = categoriesService.findCategoryById(request.getCategoryId());
         Expense expense = new Expense(request.getName(), Timestamp.from(Instant.now()), request.getPriority(), ExpenseState.IN_PROCESS,
                 request.getDescription(), request.getFixedPrice(), request.getMinPrice(), request.getMaxPrice(), category);
-        return expensesRepo.save(expense);
+        Expense savedExpense = expensesRepo.save(expense);
+        Hibernate.initialize(savedExpense.getCategory());
+        return savedExpense;
     }
 
     @Autowired

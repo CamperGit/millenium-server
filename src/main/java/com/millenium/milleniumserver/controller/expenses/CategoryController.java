@@ -17,6 +17,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -26,11 +27,10 @@ public class CategoryController {
     private CategoriesService categoriesService;
     private TeamEntityService teamEntityService;
     private WebsocketUtils websocketUtils;
-    private SimpMessagingTemplate simpMessagingTemplate;
 
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @MessageMapping("/createCategory")
-    public void createNewCategory(@Payload CategoryCreateRequest request) {
+    public void createNewCategory(@Payload @Valid CategoryCreateRequest request) {
         TeamEntity teamEntity = teamEntityService.getTeamEntityById(request.getTeamId());
         Category category = categoriesService.createNewCategory(request.getName(), teamEntity);
         websocketUtils.sendMessageToUsers(teamEntity.getUsers(), "/queue/categoriesUpdating", category);
@@ -38,7 +38,7 @@ public class CategoryController {
 
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @MessageMapping("/editCategory")
-    public void editCategory(@Payload CategoryEditRequest request) {
+    public void editCategory(@Payload @Valid CategoryEditRequest request) {
         Category updatedCategory = categoriesService.updateCategory(request.getId(), request.getNewName());
         TeamEntity teamEntity = updatedCategory.getTeam();
         websocketUtils.sendMessageToUsers(teamEntity.getUsers(), "/queue/categoriesUpdating", updatedCategory);
@@ -46,7 +46,7 @@ public class CategoryController {
 
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @MessageMapping("/deleteCategory")
-    public void deleteCategory(@Payload CategoryDeleteRequest request) {
+    public void deleteCategory(@Payload @Valid CategoryDeleteRequest request) {
         CategoryDeleteResponse response = categoriesService.deleteCategory(request.getId(), request.getDeleteExpenses());
         TeamEntity teamEntity = response.getDeletedCategory().getTeam();
         websocketUtils.sendMessageToUsers(teamEntity.getUsers(), "/queue/deletedCategories", response);
@@ -65,10 +65,5 @@ public class CategoryController {
     @Autowired
     public void setWebsocketUtils(WebsocketUtils websocketUtils) {
         this.websocketUtils = websocketUtils;
-    }
-
-    @Autowired
-    public void setSimpMessagingTemplate(SimpMessagingTemplate simpMessagingTemplate) {
-        this.simpMessagingTemplate = simpMessagingTemplate;
     }
 }
