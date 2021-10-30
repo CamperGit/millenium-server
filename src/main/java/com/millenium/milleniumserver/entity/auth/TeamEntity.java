@@ -25,7 +25,7 @@ public class TeamEntity {
     private String name;
     @JsonIgnoreProperties("team")
     private List<Category> categories;
-    @JsonIgnoreProperties("teams")
+    @JsonIgnoreProperties("team")
     private List<TeamLimit> limits;
     @JsonIgnoreProperties("teams")
     private List<UserEntity> users;

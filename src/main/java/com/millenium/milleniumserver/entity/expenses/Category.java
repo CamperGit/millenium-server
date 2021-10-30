@@ -1,5 +1,6 @@
 package com.millenium.milleniumserver.entity.expenses;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.millenium.milleniumserver.entity.auth.TeamEntity;
@@ -22,7 +23,7 @@ public class Category {
     private String name;
     @JsonIgnoreProperties("category")
     private List<Expense> expenses;
-    @JsonIgnoreProperties("categories")
+    @JsonIgnore
     private TeamEntity team;
 
     @Id

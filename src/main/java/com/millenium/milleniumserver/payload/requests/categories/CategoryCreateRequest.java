@@ -1,4 +1,4 @@
-package com.millenium.milleniumserver.payload.requests.expenses;
+package com.millenium.milleniumserver.payload.requests.categories;
 
 import com.millenium.milleniumserver.entity.auth.TeamEntity;
 import lombok.AllArgsConstructor;
@@ -13,8 +13,8 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class CategoryCreateRequest {
     @NotNull
+    private Integer teamId;
+    @NotNull
     @NotBlank
     private String name;
-    @NotNull
-    private Integer teamId;
 }
