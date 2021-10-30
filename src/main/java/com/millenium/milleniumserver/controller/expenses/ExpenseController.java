@@ -32,6 +32,15 @@ public class ExpenseController {
         websocketUtils.sendMessageToUsers(team.getUsers(), "/queue/expensesUpdating", expense);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @MessageMapping("/deleteExpense")
+    public void deleteExpense(@Payload Long expenseId) {
+        Expense expense = expensesService.deleteExpenseById(expenseId);
+        Category category = expense.getCategory();
+        TeamEntity team = category.getTeam();
+        websocketUtils.sendMessageToUsers(team.getUsers(), "/queue/deletedExpenses", expense);
+    }
+
     @Autowired
     public void setExpensesService(ExpensesService expensesService) {
         this.expensesService = expensesService;

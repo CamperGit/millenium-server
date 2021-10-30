@@ -28,6 +28,12 @@ public class ExpensesService {
         return savedExpense;
     }
 
+    public Expense deleteExpenseById(Long expenseId) {
+        Expense deletedExpense = expensesRepo.getById(expenseId);
+        expensesRepo.delete(deletedExpense);
+        return deletedExpense;
+    }
+
     @Autowired
     public void setExpensesRepo(ExpensesRepo expensesRepo) {
         this.expensesRepo = expensesRepo;
