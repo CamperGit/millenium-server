@@ -5,6 +5,7 @@ import com.millenium.milleniumserver.entity.expenses.Category;
 import com.millenium.milleniumserver.entity.expenses.Expense;
 import com.millenium.milleniumserver.payload.requests.categories.CategoryCreateRequest;
 import com.millenium.milleniumserver.payload.requests.expenses.ExpenseCreateRequest;
+import com.millenium.milleniumserver.payload.requests.expenses.ExpenseEditRequest;
 import com.millenium.milleniumserver.services.expenses.ExpensesService;
 import com.millenium.milleniumserver.utils.WebsocketUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,17 @@ public class ExpenseController {
 
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @MessageMapping("/createExpense")
-    public void createNewExpense(@Payload @Valid ExpenseCreateRequest expenseCreateRequest) {
-        Expense expense = expensesService.createNewExpense(expenseCreateRequest);
+    public void createNewExpense(@Payload @Valid ExpenseCreateRequest request) {
+        Expense expense = expensesService.createNewExpense(request);
+        Category category = expense.getCategory();
+        TeamEntity team = category.getTeam();
+        websocketUtils.sendMessageToUsers(team.getUsers(), "/queue/expensesUpdating", expense);
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @MessageMapping("/editExpense")
+    public void editExpense(@Payload @Valid ExpenseEditRequest request) {
+        Expense expense = expensesService.updateExpense(request);
         Category category = expense.getCategory();
         TeamEntity team = category.getTeam();
         websocketUtils.sendMessageToUsers(team.getUsers(), "/queue/expensesUpdating", expense);
