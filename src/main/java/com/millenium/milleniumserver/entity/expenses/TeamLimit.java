@@ -1,5 +1,6 @@
 package com.millenium.milleniumserver.entity.expenses;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.millenium.milleniumserver.entity.teams.TeamEntity;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -19,6 +20,7 @@ public class TeamLimit {
     private Double limit;
     private Integer month;
     private Integer year;
+    @JsonIgnore
     private TeamEntity team;
 
     @Id
@@ -29,7 +31,7 @@ public class TeamLimit {
     }
 
     @Basic
-    @Column(name = "limit", nullable = false, precision = 0)
+    @Column(name = "limit_value", nullable = false, precision = 0)
     public Double getLimit() {
         return limit;
     }
@@ -50,5 +52,12 @@ public class TeamLimit {
     @JoinColumn(name = "team_id", referencedColumnName = "team_id", nullable = false)
     public TeamEntity getTeam() {
         return team;
+    }
+
+    public TeamLimit(Double limit, Integer month, Integer year, TeamEntity team) {
+        this.limit = limit;
+        this.month = month;
+        this.year = year;
+        this.team = team;
     }
 }

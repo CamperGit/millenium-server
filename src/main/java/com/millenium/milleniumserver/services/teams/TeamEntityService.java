@@ -39,6 +39,10 @@ public class TeamEntityService {
         return savedTeam;
     }
 
+    public TeamEntity findTeamById(Integer teamId) {
+        return teamEntityRepo.getById(teamId);
+    }
+
     @Autowired
     public void setTeamEntityRepo(TeamEntityRepo teamEntityRepo) {
         this.teamEntityRepo = teamEntityRepo;

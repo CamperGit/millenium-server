@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TeamLimitsRepo extends JpaRepository<TeamLimit, Integer> {
+    TeamLimit findTeamLimitByMonthAndYear(Integer year, Integer month);
 }
