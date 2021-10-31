@@ -48,6 +48,12 @@ public class TeamController {
     }
 
     @PreAuthorize("hasAuthority('ROLE_USER')")
+    @GetMapping("/join")
+    public boolean sendJoinRequest(@RequestParam String inviteLink, @RequestParam Integer userId) {
+        return teamInvitesService.createTeamInvite(inviteLink, userId);
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     @GetMapping("/limit")
     public TeamLimit getTeamLimit(@RequestParam Integer year, @RequestParam Integer month) {
         return teamLimitsService.getTeamLimitByMonthAndYear(year, month);

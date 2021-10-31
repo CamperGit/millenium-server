@@ -24,6 +24,7 @@ import java.util.List;
 public class TeamEntity {
     private Integer teamId;
     private String name;
+    private String inviteLink;
     @JsonIgnoreProperties("team")
     private List<Category> categories;
     @JsonIgnoreProperties("team")
@@ -42,6 +43,12 @@ public class TeamEntity {
     @Column(name = "name", nullable = false, length = 200)
     public String getName() {
         return name;
+    }
+
+    @Basic
+    @Column(name = "invitation_link", length = 200)
+    public String getInviteLink() {
+        return inviteLink;
     }
 
     @OneToMany(mappedBy = "team")
@@ -68,4 +75,6 @@ public class TeamEntity {
         this.limits = limits;
         this.users = users;
     }
+
+
 }

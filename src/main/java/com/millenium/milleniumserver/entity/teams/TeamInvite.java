@@ -35,4 +35,9 @@ public class TeamInvite {
     public UserEntity getUser() {
         return user;
     }
+
+    public TeamInvite(TeamEntity team, UserEntity user) {
+        this.team = team;
+        this.user = user;
+    }
 }

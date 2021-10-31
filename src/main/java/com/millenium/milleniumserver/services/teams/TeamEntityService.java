@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -29,11 +30,12 @@ public class TeamEntityService {
 
     public TeamEntity createNewTeam(String name, Integer userId) {
         TeamEntity team = new TeamEntity(name, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        String inviteLinkBuilder = "https://millenium.ru/invite/" + UUID.randomUUID() + "/" + name;
+        team.setInviteLink(inviteLinkBuilder);
         TeamEntity savedTeam = teamEntityRepo.save(team);
 
         Category emptyCategory = categoriesService.createNewCategory("EMPTY", team);
         team.getCategories().add(emptyCategory);
-
         permissionEntityService.setOwnerPermissionToUserInTeam(team.getTeamId(), userId);
 
         return savedTeam;
@@ -41,6 +43,10 @@ public class TeamEntityService {
 
     public TeamEntity findTeamById(Integer teamId) {
         return teamEntityRepo.getById(teamId);
+    }
+
+    public TeamEntity findTeamByInviteLink(String inviteLink) {
+        return teamEntityRepo.findTeamEntityByInviteLink(inviteLink);
     }
 
     @Autowired

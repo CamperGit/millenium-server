@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TeamEntityRepo extends JpaRepository<TeamEntity, Integer> {
+    TeamEntity findTeamEntityByInviteLink(String inviteLink);
 }
