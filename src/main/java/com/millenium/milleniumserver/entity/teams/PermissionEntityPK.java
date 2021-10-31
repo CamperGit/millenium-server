@@ -1,4 +1,4 @@
-package com.millenium.milleniumserver.entity.auth;
+package com.millenium.milleniumserver.entity.teams;
 
 import lombok.*;
 

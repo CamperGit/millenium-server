@@ -14,7 +14,7 @@ public class ExpenseCreateRequest {
     @NotBlank
     @Size(min = 2, max = 50)
     private String name;
-    @Size(max = 500)
+    @Size(max = 1000)
     private String description;
     @NotNull
     private ExpensePriority priority;

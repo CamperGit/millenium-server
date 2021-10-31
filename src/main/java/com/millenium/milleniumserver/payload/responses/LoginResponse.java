@@ -1,10 +1,9 @@
 package com.millenium.milleniumserver.payload.responses;
 
-import com.millenium.milleniumserver.entity.auth.TeamEntity;
+import com.millenium.milleniumserver.entity.teams.TeamEntity;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 

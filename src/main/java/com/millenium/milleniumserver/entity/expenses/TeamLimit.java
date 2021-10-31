@@ -1,15 +1,12 @@
 package com.millenium.milleniumserver.entity.expenses;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.millenium.milleniumserver.entity.auth.TeamEntity;
+import com.millenium.milleniumserver.entity.teams.TeamEntity;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 @AllArgsConstructor

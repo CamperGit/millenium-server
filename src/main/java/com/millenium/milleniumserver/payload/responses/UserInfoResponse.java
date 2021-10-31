@@ -1,6 +1,6 @@
 package com.millenium.milleniumserver.payload.responses;
 
-import com.millenium.milleniumserver.entity.auth.TeamEntity;
+import com.millenium.milleniumserver.entity.teams.TeamEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

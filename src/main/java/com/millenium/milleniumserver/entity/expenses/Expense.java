@@ -1,9 +1,6 @@
 package com.millenium.milleniumserver.entity.expenses;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.millenium.milleniumserver.entity.auth.TeamEntity;
 import com.millenium.milleniumserver.enums.ExpensePriority;
 import com.millenium.milleniumserver.enums.ExpenseState;
 import lombok.AllArgsConstructor;
@@ -13,7 +10,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Objects;
 
 @Entity
 @AllArgsConstructor

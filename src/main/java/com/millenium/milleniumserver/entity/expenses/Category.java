@@ -1,10 +1,8 @@
 package com.millenium.milleniumserver.entity.expenses;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.millenium.milleniumserver.entity.auth.TeamEntity;
+import com.millenium.milleniumserver.entity.teams.TeamEntity;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

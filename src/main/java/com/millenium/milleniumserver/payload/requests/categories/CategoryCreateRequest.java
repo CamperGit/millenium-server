@@ -1,6 +1,5 @@
 package com.millenium.milleniumserver.payload.requests.categories;
 
-import com.millenium.milleniumserver.entity.auth.TeamEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

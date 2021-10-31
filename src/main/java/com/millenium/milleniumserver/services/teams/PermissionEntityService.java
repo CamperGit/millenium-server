@@ -1,13 +1,10 @@
-package com.millenium.milleniumserver.services.auth;
+package com.millenium.milleniumserver.services.teams;
 
-import com.millenium.milleniumserver.entity.auth.PermissionEntity;
-import com.millenium.milleniumserver.entity.auth.PermissionEntityPK;
-import com.millenium.milleniumserver.repos.auth.PermissionEntityRepo;
+import com.millenium.milleniumserver.entity.teams.PermissionEntity;
+import com.millenium.milleniumserver.repos.teams.PermissionEntityRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityNotFoundException;
 
 @Service
 @Transactional

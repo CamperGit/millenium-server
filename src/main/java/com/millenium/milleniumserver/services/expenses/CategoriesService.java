@@ -1,6 +1,6 @@
 package com.millenium.milleniumserver.services.expenses;
 
-import com.millenium.milleniumserver.entity.auth.TeamEntity;
+import com.millenium.milleniumserver.entity.teams.TeamEntity;
 import com.millenium.milleniumserver.entity.expenses.Category;
 import com.millenium.milleniumserver.entity.expenses.Expense;
 import com.millenium.milleniumserver.payload.responses.categories.CategoryDeleteResponse;

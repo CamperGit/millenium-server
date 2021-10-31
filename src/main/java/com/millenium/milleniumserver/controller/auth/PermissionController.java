@@ -1,7 +1,7 @@
 package com.millenium.milleniumserver.controller.auth;
 
-import com.millenium.milleniumserver.entity.auth.PermissionEntity;
-import com.millenium.milleniumserver.services.auth.PermissionEntityService;
+import com.millenium.milleniumserver.entity.teams.PermissionEntity;
+import com.millenium.milleniumserver.services.teams.PermissionEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

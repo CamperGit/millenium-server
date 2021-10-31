@@ -1,6 +1,5 @@
 package com.millenium.milleniumserver.utils;
 
-import com.millenium.milleniumserver.entity.auth.TeamEntity;
 import com.millenium.milleniumserver.entity.auth.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;

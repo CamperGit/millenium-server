@@ -1,7 +1,6 @@
 package com.millenium.milleniumserver.controller.auth;
 
 import com.millenium.milleniumserver.entity.auth.RefreshTokenEntity;
-import com.millenium.milleniumserver.entity.auth.TeamEntity;
 import com.millenium.milleniumserver.entity.auth.UserEntity;
 import com.millenium.milleniumserver.entity.auth.UserRoleEntity;
 import com.millenium.milleniumserver.exceptions.TokenException;
@@ -28,9 +27,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;

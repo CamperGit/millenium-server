@@ -1,7 +1,7 @@
-package com.millenium.milleniumserver.repos.auth;
+package com.millenium.milleniumserver.repos.teams;
 
-import com.millenium.milleniumserver.entity.auth.PermissionEntity;
-import com.millenium.milleniumserver.entity.auth.PermissionEntityPK;
+import com.millenium.milleniumserver.entity.teams.PermissionEntity;
+import com.millenium.milleniumserver.entity.teams.PermissionEntityPK;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

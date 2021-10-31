@@ -1,24 +1,21 @@
 package com.millenium.milleniumserver.controller.expenses;
 
-import com.millenium.milleniumserver.entity.auth.TeamEntity;
-import com.millenium.milleniumserver.entity.auth.UserEntity;
+import com.millenium.milleniumserver.entity.teams.TeamEntity;
 import com.millenium.milleniumserver.entity.expenses.Category;
 import com.millenium.milleniumserver.payload.requests.categories.CategoryCreateRequest;
 import com.millenium.milleniumserver.payload.requests.categories.CategoryDeleteRequest;
 import com.millenium.milleniumserver.payload.requests.categories.CategoryEditRequest;
 import com.millenium.milleniumserver.payload.responses.categories.CategoryDeleteResponse;
-import com.millenium.milleniumserver.services.auth.TeamEntityService;
+import com.millenium.milleniumserver.services.teams.TeamEntityService;
 import com.millenium.milleniumserver.services.expenses.CategoriesService;
 import com.millenium.milleniumserver.utils.WebsocketUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController

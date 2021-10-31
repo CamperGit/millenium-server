@@ -1,11 +1,8 @@
-package com.millenium.milleniumserver.services.auth;
+package com.millenium.milleniumserver.services.teams;
 
-import com.millenium.milleniumserver.entity.auth.PermissionEntity;
-import com.millenium.milleniumserver.entity.auth.PermissionEntityPK;
-import com.millenium.milleniumserver.entity.auth.TeamEntity;
-import com.millenium.milleniumserver.entity.auth.UserEntity;
+import com.millenium.milleniumserver.entity.teams.TeamEntity;
 import com.millenium.milleniumserver.entity.expenses.Category;
-import com.millenium.milleniumserver.repos.auth.TeamEntityRepo;
+import com.millenium.milleniumserver.repos.teams.TeamEntityRepo;
 import com.millenium.milleniumserver.services.expenses.CategoriesService;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 
 @Service
 @Transactional
