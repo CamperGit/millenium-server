@@ -27,9 +27,13 @@ public class TeamInvitesService {
         TeamEntity team = teamEntityService.findTeamByInviteLink(link);
         UserEntity user = userEntityService.findUserById(userId);
         if (team != null && user != null) {
-            TeamInvite joinRequest = teamInvitesRepo.save(new TeamInvite(team, user));
-            websocketUtils.sendMessageToUsers(team.getUsers(), "/queue/joinRequestUpdate", joinRequest);
-            return true;
+            if (!isCurrentInviteExist(team, user)) {
+                TeamInvite joinRequest = teamInvitesRepo.save(new TeamInvite(team, user));
+                websocketUtils.sendMessageToUsers(team.getUsers(), "/queue/joinRequestUpdate", joinRequest);
+                return true;
+            } else {
+                return false;
+            }
         } else {
             return false;
         }
@@ -49,6 +53,10 @@ public class TeamInvitesService {
     public void denyTeamInvite(Integer inviteId) {
         Optional<TeamInvite> teamInvite = teamInvitesRepo.findById(inviteId);
         teamInvite.ifPresent(invite -> teamInvitesRepo.delete(invite));
+    }
+
+    public boolean isCurrentInviteExist(TeamEntity team, UserEntity user) {
+        return teamInvitesRepo.existsByTeamAndUser(team, user);
     }
 
     public List<TeamInvite> getTeamInvites(TeamEntity team) {
