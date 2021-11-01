@@ -44,4 +44,10 @@ public class TeamMessage {
     public TeamEntity getTeam() {
         return team;
     }
+
+    public TeamMessage(String text, boolean readed, TeamEntity team) {
+        this.text = text;
+        this.readed = readed;
+        this.team = team;
+    }
 }

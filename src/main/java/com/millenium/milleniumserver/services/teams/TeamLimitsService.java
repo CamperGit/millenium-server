@@ -18,8 +18,13 @@ public class TeamLimitsService {
     private TeamEntityService teamEntityService;
 
     @Transactional(readOnly = true)
-    public TeamLimit getTeamLimitByMonthAndYear(Integer year, Integer month) {
-        return teamLimitsRepo.findTeamLimitByMonthAndYear(year, month);
+    public TeamLimit getTeamLimitByMonthAndYear(Integer year, Integer month, TeamEntity team) {
+        for (TeamLimit teamLimit : team.getLimits()) {
+            if (teamLimit.getYear().equals(year) && teamLimit.getMonth().equals(month)) {
+                return teamLimit;
+            }
+        }
+        return null;
     }
 
     public TeamLimit updateTeamLimit(TeamLimitEditRequest request) {

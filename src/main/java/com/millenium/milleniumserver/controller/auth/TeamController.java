@@ -72,11 +72,11 @@ public class TeamController {
         return teamInvitesService.createTeamInvite(inviteLink, userId);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    @GetMapping("/limit")
-    public TeamLimit getTeamLimit(@RequestParam Integer year, @RequestParam Integer month) {
-        return teamLimitsService.getTeamLimitByMonthAndYear(year, month);
-    }
+    /*@PreAuthorize("hasAuthority('ROLE_USER')")
+    @GetMapping("/{id}/limit")
+    public TeamLimit getTeamLimit(@RequestParam Integer year, @RequestParam Integer month, @PathVariable("id") TeamEntity team) {
+        return teamLimitsService.getTeamLimitByMonthAndYear(year, month, team);
+    }*/
 
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @MessageMapping("/updateTeamLimit")

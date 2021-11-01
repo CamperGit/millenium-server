@@ -104,4 +104,13 @@ public class Expense {
         this.maxPrice = maxPrice;
         this.category = category;
     }
+
+    @Transient
+    public Double getApproximatePrice() {
+        if (fixedPrice != null) {
+            return fixedPrice;
+        } else {
+            return (maxPrice + minPrice) / 2;
+        }
+    }
 }

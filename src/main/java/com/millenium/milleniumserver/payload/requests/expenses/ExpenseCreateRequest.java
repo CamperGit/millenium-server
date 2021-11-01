@@ -23,4 +23,5 @@ public class ExpenseCreateRequest {
     private Double fixedPrice;
     private Double minPrice;
     private Double maxPrice;
+    private Integer teamId;
 }

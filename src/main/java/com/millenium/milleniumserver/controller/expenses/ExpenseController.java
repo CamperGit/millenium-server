@@ -29,6 +29,7 @@ public class ExpenseController {
         Category category = expense.getCategory();
         TeamEntity team = category.getTeam();
         websocketUtils.sendMessageToUsers(team.getUsers(), "/queue/expensesUpdating", expense);
+        expensesService.checkExpensesLimit(expense, request.getTeamId());
     }
 
     @PreAuthorize("hasAuthority('ROLE_USER')")
@@ -38,6 +39,7 @@ public class ExpenseController {
         Category category = expense.getCategory();
         TeamEntity team = category.getTeam();
         websocketUtils.sendMessageToUsers(team.getUsers(), "/queue/expensesUpdating", expense);
+        expensesService.checkExpensesLimit(expense, request.getTeamId());
     }
 
     @PreAuthorize("hasAuthority('ROLE_USER')")
