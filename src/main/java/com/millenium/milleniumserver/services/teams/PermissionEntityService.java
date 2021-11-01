@@ -27,6 +27,10 @@ public class PermissionEntityService {
         permissionEntityRepo.save(permission);
     }
 
+    public PermissionEntity savePermission(PermissionEntity permissionEntity) {
+        return permissionEntityRepo.save(permissionEntity);
+    }
+
     @Autowired
     public void setPermissionEntityRepo(PermissionEntityRepo permissionEntityRepo) {
         this.permissionEntityRepo = permissionEntityRepo;

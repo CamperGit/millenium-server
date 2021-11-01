@@ -1,6 +1,7 @@
 package com.millenium.milleniumserver.services.teams;
 
 import com.millenium.milleniumserver.entity.auth.UserEntity;
+import com.millenium.milleniumserver.entity.teams.PermissionEntity;
 import com.millenium.milleniumserver.entity.teams.TeamEntity;
 import com.millenium.milleniumserver.entity.teams.TeamInvite;
 import com.millenium.milleniumserver.repos.teams.TeamInvitesRepo;
@@ -10,12 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @Transactional
 public class TeamInvitesService {
     private TeamInvitesRepo teamInvitesRepo;
     private TeamEntityService teamEntityService;
     private UserEntityService userEntityService;
+    private PermissionEntityService permissionEntityService;
     private WebsocketUtils websocketUtils;
 
     public boolean createTeamInvite(String link, Integer userId) {
@@ -28,6 +33,26 @@ public class TeamInvitesService {
         } else {
             return false;
         }
+    }
+
+    public void applyTeamInvite(Integer inviteId) {
+        Optional<TeamInvite> teamInvite = teamInvitesRepo.findById(inviteId);
+        teamInvite.ifPresent(invite -> {
+            TeamEntity team = invite.getTeam();
+            UserEntity user = invite.getUser();
+            PermissionEntity permission = new PermissionEntity(team.getTeamId(), user.getUserId(), false, true, false, false, false);
+            teamInvitesRepo.delete(invite);
+            permissionEntityService.savePermission(permission);
+        });
+    }
+
+    public void denyTeamInvite(Integer inviteId) {
+        Optional<TeamInvite> teamInvite = teamInvitesRepo.findById(inviteId);
+        teamInvite.ifPresent(invite -> teamInvitesRepo.delete(invite));
+    }
+
+    public List<TeamInvite> getTeamInvites(TeamEntity team) {
+        return teamInvitesRepo.findAllByTeam(team);
     }
 
     @Autowired
@@ -48,5 +73,10 @@ public class TeamInvitesService {
     @Autowired
     public void setWebsocketUtils(WebsocketUtils websocketUtils) {
         this.websocketUtils = websocketUtils;
+    }
+
+    @Autowired
+    public void setPermissionEntityService(PermissionEntityService permissionEntityService) {
+        this.permissionEntityService = permissionEntityService;
     }
 }
