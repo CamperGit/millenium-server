@@ -2,15 +2,14 @@ package com.millenium.milleniumserver.controller.auth;
 
 import com.millenium.milleniumserver.entity.expenses.Expense;
 import com.millenium.milleniumserver.entity.expenses.TeamLimit;
+import com.millenium.milleniumserver.entity.teams.PermissionEntity;
 import com.millenium.milleniumserver.entity.teams.TeamEntity;
 import com.millenium.milleniumserver.entity.expenses.Category;
 import com.millenium.milleniumserver.entity.teams.TeamInvite;
 import com.millenium.milleniumserver.payload.requests.teams.TeamLimitEditRequest;
+import com.millenium.milleniumserver.payload.responses.teams.UserPermissionsResponse;
 import com.millenium.milleniumserver.repos.teams.TeamInvitesRepo;
-import com.millenium.milleniumserver.services.teams.TeamEntityService;
-import com.millenium.milleniumserver.services.teams.TeamInvitesService;
-import com.millenium.milleniumserver.services.teams.TeamLimitsService;
-import com.millenium.milleniumserver.services.teams.TeamMessagesService;
+import com.millenium.milleniumserver.services.teams.*;
 import com.millenium.milleniumserver.utils.WebsocketUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -27,8 +26,8 @@ import java.util.Optional;
 public class TeamController {
     private TeamEntityService teamEntityService;
     private TeamLimitsService teamLimitsService;
-    private TeamMessagesService teamMessagesService;
     private TeamInvitesService teamInvitesService;
+    private PermissionEntityService permissionEntityService;
     private WebsocketUtils websocketUtils;
 
     @PreAuthorize("hasAuthority('ROLE_USER')")
@@ -61,9 +60,10 @@ public class TeamController {
         return teamInvitesService.getTeamInvites(teamEntity);
     }
 
-    @GetMapping
-    public TeamEntity getTeamById(@RequestParam Integer teamId) {
-        return teamEntityService.getTeamEntityById(teamId);
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @GetMapping("/{id}/permissions")
+    public List<UserPermissionsResponse> getTeamUserPermissions(@PathVariable("id") TeamEntity teamEntity) {
+        return permissionEntityService.getUserPermissionsInTeam(teamEntity);
     }
 
     @PreAuthorize("hasAuthority('ROLE_USER')")
@@ -71,12 +71,6 @@ public class TeamController {
     public boolean sendJoinRequest(@RequestParam String inviteLink, @RequestParam Integer userId) {
         return teamInvitesService.createTeamInvite(inviteLink, userId);
     }
-
-    /*@PreAuthorize("hasAuthority('ROLE_USER')")
-    @GetMapping("/{id}/limit")
-    public TeamLimit getTeamLimit(@RequestParam Integer year, @RequestParam Integer month, @PathVariable("id") TeamEntity team) {
-        return teamLimitsService.getTeamLimitByMonthAndYear(year, month, team);
-    }*/
 
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @MessageMapping("/updateTeamLimit")
@@ -97,13 +91,13 @@ public class TeamController {
     }
 
     @Autowired
-    public void setTeamMessagesService(TeamMessagesService teamMessagesService) {
-        this.teamMessagesService = teamMessagesService;
+    public void setTeamInvitesService(TeamInvitesService teamInvitesService) {
+        this.teamInvitesService = teamInvitesService;
     }
 
     @Autowired
-    public void setTeamInvitesService(TeamInvitesService teamInvitesService) {
-        this.teamInvitesService = teamInvitesService;
+    public void setPermissionEntityService(PermissionEntityService permissionEntityService) {
+        this.permissionEntityService = permissionEntityService;
     }
 
     @Autowired

@@ -1,15 +1,23 @@
 package com.millenium.milleniumserver.services.teams;
 
+import com.millenium.milleniumserver.entity.auth.UserEntity;
 import com.millenium.milleniumserver.entity.teams.PermissionEntity;
+import com.millenium.milleniumserver.entity.teams.TeamEntity;
+import com.millenium.milleniumserver.payload.responses.teams.UserPermissionsResponse;
 import com.millenium.milleniumserver.repos.teams.PermissionEntityRepo;
+import com.millenium.milleniumserver.services.auth.UserEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
 public class PermissionEntityService {
     private PermissionEntityRepo permissionEntityRepo;
+    private UserEntityService userEntityService;
 
     public PermissionEntity findPermissionByUserAndTeam(Integer teamId, Integer userId) {
         return permissionEntityRepo.findByTeamIdAndUserId(teamId, userId);
@@ -31,8 +39,26 @@ public class PermissionEntityService {
         return permissionEntityRepo.save(permissionEntity);
     }
 
+    public List<UserPermissionsResponse> getUserPermissionsInTeam(TeamEntity team) {
+        List<UserPermissionsResponse> responses = new ArrayList<>();
+        List<PermissionEntity> teamPermissions = permissionEntityRepo.findAllByTeamId(team.getTeamId());
+        for (PermissionEntity permissionEntity : teamPermissions) {
+            UserPermissionsResponse response = new UserPermissionsResponse();
+            UserEntity user = userEntityService.findUserById(permissionEntity.getUserId());
+            response.setPermissions(permissionEntity);
+            response.setUsername(user.getUsername());
+            responses.add(response);
+        }
+        return responses;
+    }
+
     @Autowired
     public void setPermissionEntityRepo(PermissionEntityRepo permissionEntityRepo) {
         this.permissionEntityRepo = permissionEntityRepo;
+    }
+
+    @Autowired
+    public void setUserEntityService(UserEntityService userEntityService) {
+        this.userEntityService = userEntityService;
     }
 }

@@ -9,7 +9,6 @@ import java.util.List;
 
 @Repository
 public interface PermissionEntityRepo extends JpaRepository<PermissionEntity, PermissionEntityPK> {
-    List<PermissionEntity> findByUserId(Integer userID);
-    List<PermissionEntity> findByTeamId(Integer userID);
+    List<PermissionEntity> findAllByTeamId(Integer teamId);
     PermissionEntity findByTeamIdAndUserId(Integer teamId, Integer userId);
 }
