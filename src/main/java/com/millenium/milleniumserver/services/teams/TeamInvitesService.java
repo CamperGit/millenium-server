@@ -4,6 +4,7 @@ import com.millenium.milleniumserver.entity.auth.UserEntity;
 import com.millenium.milleniumserver.entity.teams.PermissionEntity;
 import com.millenium.milleniumserver.entity.teams.TeamEntity;
 import com.millenium.milleniumserver.entity.teams.TeamInvite;
+import com.millenium.milleniumserver.payload.responses.teams.UserPermissionsResponse;
 import com.millenium.milleniumserver.repos.teams.TeamInvitesRepo;
 import com.millenium.milleniumserver.services.auth.UserEntityService;
 import com.millenium.milleniumserver.utils.WebsocketUtils;
@@ -46,7 +47,8 @@ public class TeamInvitesService {
             UserEntity user = invite.getUser();
             PermissionEntity permission = new PermissionEntity(team.getTeamId(), user.getUserId(), false, true, false, false, false);
             teamInvitesRepo.delete(invite);
-            permissionEntityService.savePermission(permission);
+            PermissionEntity savedPermission = permissionEntityService.savePermission(permission);
+            websocketUtils.sendMessageToUsers(team.getUsers(), "/queue/addNewUserToTeam", new UserPermissionsResponse(savedPermission, user.getUsername()));
         });
     }
 
