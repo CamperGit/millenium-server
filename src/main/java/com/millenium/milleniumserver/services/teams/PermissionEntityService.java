@@ -52,6 +52,18 @@ public class PermissionEntityService {
         return responses;
     }
 
+    public List<PermissionEntity> updatePermissions(List<PermissionEntity> permissions) {
+        return permissionEntityRepo.saveAll(permissions);
+    }
+
+    public PermissionEntity deletePermission(Integer userId, Integer teamId) {
+        PermissionEntity permissionToDelete = permissionEntityRepo.findByTeamIdAndUserId(teamId, userId);
+        if (permissionToDelete != null) {
+            permissionEntityRepo.delete(permissionToDelete);
+        }
+        return permissionToDelete;
+    }
+
     @Autowired
     public void setPermissionEntityRepo(PermissionEntityRepo permissionEntityRepo) {
         this.permissionEntityRepo = permissionEntityRepo;
