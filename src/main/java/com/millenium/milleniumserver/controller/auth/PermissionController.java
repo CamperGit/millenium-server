@@ -4,9 +4,9 @@ import com.millenium.milleniumserver.entity.auth.UserEntity;
 import com.millenium.milleniumserver.entity.teams.PermissionEntity;
 import com.millenium.milleniumserver.entity.teams.TeamEntity;
 import com.millenium.milleniumserver.payload.responses.teams.UserPermissionsResponse;
-import com.millenium.milleniumserver.services.teams.PermissionEntityService;
-import com.millenium.milleniumserver.services.teams.TeamEntityService;
-import com.millenium.milleniumserver.utils.WebsocketUtils;
+import com.millenium.milleniumserver.service.teams.PermissionEntityService;
+import com.millenium.milleniumserver.service.teams.TeamEntityService;
+import com.millenium.milleniumserver.util.WebsocketUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

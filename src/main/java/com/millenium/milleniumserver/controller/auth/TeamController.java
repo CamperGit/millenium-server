@@ -1,16 +1,13 @@
 package com.millenium.milleniumserver.controller.auth;
 
-import com.millenium.milleniumserver.entity.expenses.Expense;
 import com.millenium.milleniumserver.entity.expenses.TeamLimit;
-import com.millenium.milleniumserver.entity.teams.PermissionEntity;
 import com.millenium.milleniumserver.entity.teams.TeamEntity;
 import com.millenium.milleniumserver.entity.expenses.Category;
 import com.millenium.milleniumserver.entity.teams.TeamInvite;
 import com.millenium.milleniumserver.payload.requests.teams.TeamLimitEditRequest;
 import com.millenium.milleniumserver.payload.responses.teams.UserPermissionsResponse;
-import com.millenium.milleniumserver.repos.teams.TeamInvitesRepo;
-import com.millenium.milleniumserver.services.teams.*;
-import com.millenium.milleniumserver.utils.WebsocketUtils;
+import com.millenium.milleniumserver.service.teams.*;
+import com.millenium.milleniumserver.util.WebsocketUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -18,7 +15,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin(origins = "${crossOrigin.url}", maxAge = 3600)
 @RestController

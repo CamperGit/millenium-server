@@ -6,9 +6,9 @@ import com.millenium.milleniumserver.payload.requests.categories.CategoryCreateR
 import com.millenium.milleniumserver.payload.requests.categories.CategoryDeleteRequest;
 import com.millenium.milleniumserver.payload.requests.categories.CategoryEditRequest;
 import com.millenium.milleniumserver.payload.responses.categories.CategoryDeleteResponse;
-import com.millenium.milleniumserver.services.teams.TeamEntityService;
-import com.millenium.milleniumserver.services.expenses.CategoriesService;
-import com.millenium.milleniumserver.utils.WebsocketUtils;
+import com.millenium.milleniumserver.service.teams.TeamEntityService;
+import com.millenium.milleniumserver.service.expenses.CategoriesService;
+import com.millenium.milleniumserver.util.WebsocketUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;

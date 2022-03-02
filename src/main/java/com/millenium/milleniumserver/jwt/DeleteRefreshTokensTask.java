@@ -1,7 +1,7 @@
 package com.millenium.milleniumserver.jwt;
 
 import com.millenium.milleniumserver.entity.auth.RefreshTokenEntity;
-import com.millenium.milleniumserver.services.auth.RefreshTokenService;
+import com.millenium.milleniumserver.service.auth.RefreshTokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;

@@ -2,7 +2,7 @@ package com.millenium.milleniumserver.config;
 
 import com.millenium.milleniumserver.jwt.AuthEntryPointJwt;
 import com.millenium.milleniumserver.jwt.AuthTokenFilter;
-import com.millenium.milleniumserver.services.auth.UserEntityService;
+import com.millenium.milleniumserver.service.auth.UserEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,8 +16,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
