@@ -18,9 +18,13 @@ import com.millenium.milleniumserver.specifiaction.Specifications;
 import com.millenium.milleniumserver.util.WebsocketUtils;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -29,7 +33,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.millenium.milleniumserver.specifiaction.Specifications.likeOrReturnNull;
+import static com.millenium.milleniumserver.specifiaction.Specifications.*;
 
 @Service
 @Transactional
@@ -40,21 +44,6 @@ public class ExpensesService {
     private TeamEntityService teamEntityService;
     private TeamMessagesService teamMessagesService;
     private WebsocketUtils websocketUtils;
-
-    public List<Expense> getExpensesByFilter(ExpensesFilterPayload filters) {
-        List<Specification<Category>> specifications = Arrays.asList(
-                likeOrReturnNull("name", filters.getName(), Category.class),
-                ExpensesSpecifications.<Expense>equalCategoryInAssigneeOrReturnNull("executor.userId", filters.getExecutor(), filters.getAssigneeIds())
-                /*lessThanEqualToOrNull("expenses.fixedPrice", filters.getMaxPrice(), Category.class),
-                greaterThanEqualToOrNull("expenses.fixedPrice", filters.getMinPrice(), Category.class)*/
-        );
-
-        return categoriesRepo.findAll(
-                Specifications.And.<Category>builder()
-                        .specifications(specifications)
-                        .build()
-        );
-    }
 
     public Expense createNewExpense(ExpenseCreateRequest request) {
         Category category = categoriesService.findCategoryById(request.getCategoryId());
@@ -148,6 +137,29 @@ public class ExpensesService {
             sum -= expenseToDelete.getApproximatePrice();
         }
         return expensesToDelete;
+    }
+
+    public List<Expense> filter(ExpensesFilterPayload filters) {
+        System.out.println(filters);
+        List<Specification<Expense>> specifications = Arrays.asList(
+                equalOrReturnNull("category.categoryId", filters.getCategoryId(), Expense.class),
+                likeOrReturnNull("name", filters.getName(), Expense.class),
+                filters.getMinPrice() != null ? Or.<Expense>builder()
+                        .specifications(Arrays.asList(
+                                greaterThanEqualToOrNull("fixedPrice", filters.getMinPrice(), Expense.class),
+                                greaterThanEqualToOrNull("minPrice", filters.getMinPrice(), Expense.class)))
+                        .build() : null,
+                filters.getMaxPrice() != null ? Or.<Expense>builder()
+                        .specifications(Arrays.asList(
+                                lessThanEqualToOrNull("fixedPrice", filters.getMaxPrice(), Expense.class),
+                                lessThanEqualToOrNull("maxPrice", filters.getMaxPrice(), Expense.class)))
+                        .build() : null
+        );
+        And<Expense> build = And.<Expense>builder()
+                .specifications(specifications)
+                .build();
+        List<Expense> all = expensesRepo.findAll(build);
+        return all;
     }
 
     @Autowired

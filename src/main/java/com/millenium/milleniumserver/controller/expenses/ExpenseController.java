@@ -26,8 +26,8 @@ public class ExpenseController {
 
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @GetMapping("/filter")
-    public List<Category> filterCategories(ExpensesFilterPayload filters) {
-        return categoriesService.getCategoriesByFilter(filters);
+    public List<Expense> filterExpenses(@ModelAttribute ExpensesFilterPayload filters) {
+        return expensesService.filter(filters);
     }
 
     @PreAuthorize("hasAuthority('ROLE_USER')")

@@ -347,6 +347,9 @@ public final class Specifications {
             } else if (from.get(_column).getJavaType() == BigDecimal.class) {
                 Expression<BigDecimal> ltExpression = from.get(_column);
                 return criteriaBuilder.greaterThanOrEqualTo(ltExpression, TypeUtils.valueOf(value, BigDecimal.class));
+            } else if (from.get(_column).getJavaType() == Double.class) {
+                Expression<Double> ltExpression = from.get(_column);
+                return criteriaBuilder.greaterThanOrEqualTo(ltExpression, TypeUtils.valueOf(value, Double.class));
             }
             throw new RuntimeException("Couldn't determinate greater then property type");
         }
@@ -385,6 +388,9 @@ public final class Specifications {
             } else if (from.get(_column).getJavaType() == BigDecimal.class) {
                 Expression<BigDecimal> ltExpression = from.get(_column);
                 return criteriaBuilder.lessThanOrEqualTo(ltExpression, TypeUtils.valueOf(value, BigDecimal.class));
+            } else if (from.get(_column).getJavaType() == Double.class) {
+                Expression<Double> ltExpression = from.get(_column);
+                return criteriaBuilder.lessThanOrEqualTo(ltExpression, TypeUtils.valueOf(value, Double.class));
             }
             throw new RuntimeException("Couldn't determinate less then property type");
         }

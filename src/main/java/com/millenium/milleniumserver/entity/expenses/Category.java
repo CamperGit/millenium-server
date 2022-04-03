@@ -20,7 +20,6 @@ import java.util.List;
 public class Category {
     private Integer categoryId;
     private String name;
-    @JsonIgnoreProperties("category")
     private List<Expense> expenses;
     @JsonIgnore
     private TeamEntity team;

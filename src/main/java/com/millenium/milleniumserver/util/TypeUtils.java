@@ -53,6 +53,8 @@ public final class TypeUtils {
             return (T) Integer.valueOf(value.toString());
         } else if (clazz == BigDecimal.class) {
             return (T) new BigDecimal(value.toString());
+        } else if (clazz == Double.class) {
+            return (T) Double.valueOf(value.toString());
         }
 
         throw new IllegalArgumentException(
