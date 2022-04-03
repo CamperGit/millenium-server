@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import javax.persistence.EntityNotFoundException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -47,7 +48,7 @@ public class ExpensesService {
 
     public Expense createNewExpense(ExpenseCreateRequest request) {
         Category category = categoriesService.findCategoryById(request.getCategoryId());
-        Expense expense = new Expense(request.getName(), Timestamp.from(Instant.now()), request.getPriority(), ExpenseState.IN_PROCESS,
+        Expense expense = new Expense(request.getName(), LocalDateTime.now(), request.getPriority(), ExpenseState.IN_PROCESS,
                 request.getDescription(), request.getFixedPrice(), request.getMinPrice(), request.getMaxPrice(), category);
         Expense savedExpense = expensesRepo.save(expense);
         Hibernate.initialize(savedExpense.getCategory());
@@ -64,21 +65,21 @@ public class ExpensesService {
         expense.setFixedPrice(request.getFixedPrice());
         expense.setMinPrice(request.getMinPrice());
         expense.setMaxPrice(request.getMaxPrice());
-        expense.setDate(Timestamp.from(Instant.now()));
+        expense.setDate(LocalDateTime.now());
         Expense savedExpense = expensesRepo.save(expense);
         Hibernate.initialize(savedExpense.getCategory());
         return savedExpense;
     }
 
     public Expense deleteExpenseById(Long expenseId) {
-        Expense deletedExpense = expensesRepo.getById(expenseId);
+        Expense deletedExpense = expensesRepo.findById(expenseId).orElseThrow(EntityNotFoundException::new);
         expensesRepo.delete(deletedExpense);
         return deletedExpense;
     }
 
     public void checkExpensesLimit(Expense expense, Integer teamId) {
         TeamEntity team = teamEntityService.findTeamById(teamId);
-        LocalDateTime localDateTime = expense.getDate().toLocalDateTime();
+        LocalDateTime localDateTime = expense.getDate();
         LocalDate dateOfExpense = localDateTime.toLocalDate();
         int month = dateOfExpense.getMonthValue();
         int year = dateOfExpense.getYear();
@@ -103,7 +104,7 @@ public class ExpensesService {
                 .map(Category::getExpenses)
                 .flatMap(Collection::stream)
                 .filter(ex -> {
-                    LocalDate date = ex.getDate().toLocalDateTime().toLocalDate();
+                    LocalDate date = ex.getDate().toLocalDate();
                     return (date.isAfter(startOfMonth) || date.equals(startOfMonth)) &&
                             (date.isBefore(endOfMonth) || date.equals(endOfMonth));
                 })
@@ -153,13 +154,14 @@ public class ExpensesService {
                         .specifications(Arrays.asList(
                                 lessThanEqualToOrNull("fixedPrice", filters.getMaxPrice(), Expense.class),
                                 lessThanEqualToOrNull("maxPrice", filters.getMaxPrice(), Expense.class)))
-                        .build() : null
+                        .build() : null,
+                inOrReturnNull("priority", filters.getPriorityIn(), Expense.class),
+                lessThanEqualToOrNull("date", filters.getCreateDateAtTop(), Expense.class),
+                greaterThanEqualToOrNull("date", filters.getCreateDateAtBottom(), Expense.class)
         );
-        And<Expense> build = And.<Expense>builder()
+        return expensesRepo.findAll(And.<Expense>builder()
                 .specifications(specifications)
-                .build();
-        List<Expense> all = expensesRepo.findAll(build);
-        return all;
+                .build());
     }
 
     @Autowired

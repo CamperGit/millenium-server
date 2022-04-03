@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @AllArgsConstructor
@@ -20,7 +21,7 @@ import java.sql.Timestamp;
 public class Expense {
     private Long expenseId;
     private String name;
-    private Timestamp date;
+    private LocalDateTime date;
     private ExpensePriority priority;
     private ExpenseState state;
     private String description;
@@ -45,7 +46,7 @@ public class Expense {
 
     @Basic
     @Column(name = "date", nullable = false)
-    public Timestamp getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
@@ -93,7 +94,7 @@ public class Expense {
         return category;
     }
 
-    public Expense(String name, Timestamp date, ExpensePriority priority, ExpenseState state, String description, Double fixedPrice, Double minPrice, Double maxPrice, Category category) {
+    public Expense(String name, LocalDateTime date, ExpensePriority priority, ExpenseState state, String description, Double fixedPrice, Double minPrice, Double maxPrice, Category category) {
         this.name = name;
         this.date = date;
         this.priority = priority;
