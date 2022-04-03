@@ -141,7 +141,6 @@ public class ExpensesService {
     }
 
     public List<Expense> filter(ExpensesFilterPayload filters) {
-        System.out.println(filters);
         List<Specification<Expense>> specifications = Arrays.asList(
                 equalOrReturnNull("category.categoryId", filters.getCategoryId(), Expense.class),
                 likeOrReturnNull("name", filters.getName(), Expense.class),
