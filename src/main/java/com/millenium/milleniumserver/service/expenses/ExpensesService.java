@@ -6,15 +6,19 @@ import com.millenium.milleniumserver.entity.expenses.TeamLimit;
 import com.millenium.milleniumserver.entity.teams.TeamEntity;
 import com.millenium.milleniumserver.entity.teams.TeamMessage;
 import com.millenium.milleniumserver.enums.ExpenseState;
+import com.millenium.milleniumserver.payload.requests.expenses.ExpensesFilterPayload;
 import com.millenium.milleniumserver.payload.requests.expenses.ExpenseCreateRequest;
 import com.millenium.milleniumserver.payload.requests.expenses.ExpenseEditRequest;
 import com.millenium.milleniumserver.repo.expenses.ExpensesRepo;
 import com.millenium.milleniumserver.service.teams.TeamEntityService;
 import com.millenium.milleniumserver.service.teams.TeamLimitsService;
 import com.millenium.milleniumserver.service.teams.TeamMessagesService;
+import com.millenium.milleniumserver.specifiaction.ExpensesSpecifications;
+import com.millenium.milleniumserver.specifiaction.Specifications;
 import com.millenium.milleniumserver.util.WebsocketUtils;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +29,8 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.millenium.milleniumserver.specifiaction.Specifications.likeOrReturnNull;
+
 @Service
 @Transactional
 public class ExpensesService {
@@ -34,6 +40,21 @@ public class ExpensesService {
     private TeamEntityService teamEntityService;
     private TeamMessagesService teamMessagesService;
     private WebsocketUtils websocketUtils;
+
+    public List<Expense> getExpensesByFilter(ExpensesFilterPayload filters) {
+        List<Specification<Category>> specifications = Arrays.asList(
+                likeOrReturnNull("name", filters.getName(), Category.class),
+                ExpensesSpecifications.<Expense>equalCategoryInAssigneeOrReturnNull("executor.userId", filters.getExecutor(), filters.getAssigneeIds())
+                /*lessThanEqualToOrNull("expenses.fixedPrice", filters.getMaxPrice(), Category.class),
+                greaterThanEqualToOrNull("expenses.fixedPrice", filters.getMinPrice(), Category.class)*/
+        );
+
+        return categoriesRepo.findAll(
+                Specifications.And.<Category>builder()
+                        .specifications(specifications)
+                        .build()
+        );
+    }
 
     public Expense createNewExpense(ExpenseCreateRequest request) {
         Category category = categoriesService.findCategoryById(request.getCategoryId());

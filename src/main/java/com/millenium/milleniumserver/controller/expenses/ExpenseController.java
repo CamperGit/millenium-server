@@ -3,6 +3,7 @@ package com.millenium.milleniumserver.controller.expenses;
 import com.millenium.milleniumserver.entity.teams.TeamEntity;
 import com.millenium.milleniumserver.entity.expenses.Category;
 import com.millenium.milleniumserver.entity.expenses.Expense;
+import com.millenium.milleniumserver.payload.requests.expenses.ExpensesFilterPayload;
 import com.millenium.milleniumserver.payload.requests.expenses.ExpenseCreateRequest;
 import com.millenium.milleniumserver.payload.requests.expenses.ExpenseEditRequest;
 import com.millenium.milleniumserver.service.expenses.ExpensesService;
@@ -14,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @CrossOrigin(origins = "${crossOrigin.url}", maxAge = 3600)
 @RestController
@@ -21,6 +23,12 @@ import javax.validation.Valid;
 public class ExpenseController {
     private ExpensesService expensesService;
     private WebsocketUtils websocketUtils;
+
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @GetMapping("/filter")
+    public List<Category> filterCategories(ExpensesFilterPayload filters) {
+        return categoriesService.getCategoriesByFilter(filters);
+    }
 
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @MessageMapping("/createExpense")
